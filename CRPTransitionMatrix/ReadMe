@@ -1,0 +1,6 @@
+These are functions to work out the transition probability matrix of
+the chinese restaurant process. This is the model for change in IBD
+state over the chromosome.
+
+Also, functions to change from IBD states to labels for an arbitrary
+number of chromosomes.
