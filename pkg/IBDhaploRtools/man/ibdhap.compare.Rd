@@ -1,14 +1,14 @@
 \name{ibdhap.compare}
 \alias{ibdhap.compare}
 
-\title{
-  ibdhap compare
-}
-\description{Compares inferred ibd state with simulated "true" states. Calculates the proportion of markers called in the correct state, false positives (i.e. inferring ibd shared when none is shared), false negatives (i.e. inferring no ibd shared when ibd sharing is present) and the proportion of no calls. 
-}
+\title{ ibdhap compare } \description{Compares inferred ibd state with
+  simulated "true" states. Calculates the proportion of markers called
+  in the correct state, false positives (i.e. inferring ibd shared when
+  none is shared), false negatives (i.e. inferring no ibd shared when
+  ibd sharing is present) and the proportion of no calls.  }
 
 \usage{
-ibdhap.summary(states.dat, simu.data, data.type=c("h", "g","r")
+ibdhap.compare(states.dat, simu.dat, data.type=c("h", "g","r"))
 }
 
 \arguments{
@@ -47,6 +47,17 @@ Returns a list consisting of:
 
 \examples{
 
+## this example is taken from the package vignette.
+##See vignette(IBDhaploRtools_tutorial)
+
+data(qibd_phased)
+data(ids_phased)
+data(trueibd_phased)
+
+phased.gold <- ibdhap.make.states( qibd.file  = qibd_phased,
+                   ids.file= ids_phased, cutoff = 0.8)
+
+ibdhap.compare(phased.gold, trueibd_phased, "h")
 }
 
 

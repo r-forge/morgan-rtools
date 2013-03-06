@@ -10,27 +10,34 @@ function creates is expected by other functions in this package.
 }
 
 \usage{
-ibdhap.make.states(qibd.filename, dat.filename, cutoff = 0.8)
+ibdhap.make.states(qibd.filename = NULL, ids.filename = NULL, qibd.file
+= NULL, ids.file = NULL, cutoff = 0.8)
 }
 
 \arguments{
-  \item{qibd.filename}{ The filename of the qibd.out file the is produced from running
-    ibd_haplo. This is to be input as a character string. In the
-    examples, this file is called "qibd_h.gold". 
+  \item{qibd.file}{ A matrix of the contents of the qibd.out file the is
+  produced from running ibd_haplo. If this is left as the default NULL,
+  qibd.filename should be specified}
+  \item{qibd.filename}{ The filename (location) of the qibd.out file the
+  is produced from running ibd_haplo. This is to be input as a character
+  string. The qibd file will be loaded from this location if qibd.file
+  is not specified.
+  }
+  \item{ids.file}{ A matrix of the .ids file used to run ibd_haplo.If
+    this is left as the default NULL, ids.filename should be specified
+  } 
+\item{ids.filename}{ The filename (location) of the ids file used to run
+  ibd_haplo. This is to be input as a character string. The ids file
+  will be loaded from this location if ids.file is not specified.
 }
-\item{dat.filename}{The filename of the .dat file used to run ibd_haplo. This is the
-  complicated parameter file that consists of three lines of values /
-  indicators that tells ibd_haplo what to do. In the examples, this
-  files is called "compu_4hap.dat".  
+  \item{cutoff}{A scalar value between 0 and 1 to act as the "cutoff"
+    value. This is the value which, if the maximum marginal probability
+  of an ibd state is greater than, that marker will be called that
+  state. Otherwise, the marker is called as zero, which in this context,
+  means that there was  not evidence enough to determine the specific
+  ibd state of that marker. Default value is 0.8.
 }
-  \item{cutoff}{A scalar value between 0 and 1 to act as the "cutoff" value. This is
-  the value which, if the maximum marginal probability of an ibd state
-  is greater than, that marker will be called that state. Otherwise, the
-  marker is called as zero, which in this context, means that there was
-  not evidence enough to determine the specific ibd state of that
-  marker. Default value is 0.8. }
-
-
+}
 \value{
   Returns a data.frame with
   ncol = # of sets of haplotypes/ pairs of
@@ -52,5 +59,19 @@ M.D. Brown
 
 \examples{
 
+## this example is taken from the package vignette.
+##See vignette(IBDhaploRtools_tutorial)
+
+data(qibd_phased)
+data(ids_phased)
+
+phased.gold <- ibdhap.make.states( qibd.file  = qibd_phased,
+                   ids.file= ids_phased, cutoff = 0.8)
+
+## alternatively, specify the file location, e.g.
+## qibd.filename <- '~/Documents/qibd_unphased_2011.gold'
+## ids.filename <- '~/Documents/ids_unphased_2011.gold'
+## phased.gold <- ibdhap.make.states( qibd.filename = qibd.filename, 
+##                   ids.filename = ids.filename, cutoff = 0.8)
 
 }

@@ -41,7 +41,9 @@ ibdhap.barplot(x, data.type = c("h", "g", "r"), col = c("grey", "red",
     density of diagonal lines filling each segment in lines per sq
     inch. 
 }
- 
+\item{...}{
+  additional graphical parameters
+  }
 }
 
 \author{
@@ -51,4 +53,18 @@ ibdhap.barplot(x, data.type = c("h", "g", "r"), col = c("grey", "red",
 
 \examples{
 
+## this example is taken from the package vignette.
+##See vignette(IBDhaploRtools_tutorial)
+
+data(qibd_phased)
+data(ids_phased)
+
+phased.gold <- ibdhap.make.states( qibd.file  = qibd_phased,
+                   ids.file= ids_phased, cutoff = 0.8)
+
+par(mfrow=c(4,1)) 
+ibdhap.barplot(phased.gold[,1], data.type="h", xlab="", ylab="") 
+ibdhap.barplot(phased.gold[,2], data.type="h", xlab="", ylab="")
+ibdhap.barplot(phased.gold[,3], data.type="h", xlab="", ylab="")
+ibdhap.barplot(phased.gold[,4], data.type="h", xlab="", ylab="")
 }

@@ -26,19 +26,16 @@ ibdhap.summary(states.dat, data.type = c("h", "g", "r"), position = NA)
     then ibdhap.make.states) 
 }
 
-  \item{position}{ A position vector, with the same length as nrow(states.dat) describing the
-    positions (in cM, M, or any other metric) of each marker. If
-    positions is not included, "segment length" refers to number of SNPs
-    making up a segment.
-}
-}
-\details{
-  ibdhap.summary analyzes all the data it is given.If states.dat
-  consists of more than one column, means are calculated across all sets
-  of haplotypes. For summaries on only one set of haplotypes/pair of genotypes, just pass this function
-  the column of data corresponding to the specific set on which you want
-  summary statistics.  
-}
+  \item{position}{ A position vector, with the same length as
+    nrow(states.dat) describing the positions (in cM, M, or any other
+    metric) of each marker. If positions is not included, "segment
+    length" refers to number of SNPs making up a segment.  } } \details{
+    ibdhap.summary analyzes all the data it is given.If states.dat
+    consists of more than one column, means are calculated across all
+    sets of haplotypes. For summaries on only one set of haplotypes/pair
+    of genotypes, just pass this function the column of data
+    corresponding to the specific set on which you want summary
+    statistics.  }
 
 \value{
 
@@ -58,4 +55,16 @@ Returns a list consisting of:
 }
 
 \examples{
+
+## this example is taken from the package vignette.
+##See vignette(IBDhaploRtools_tutorial)
+
+data(qibd_phased)
+data(ids_phased)
+data(trueibd_phased)
+
+phased.gold <- ibdhap.make.states( qibd.file  = qibd_phased,
+                   ids.file= ids_phased, cutoff = 0.8)
+
+summary.phased <- ibdhap.summary( phased.gold, data.type="h")
 }

@@ -10,7 +10,8 @@
 available, this function creates a dataframe of how well ibd_haplo infers segments based on segment length.
 }
 \usage{
-ibdhap.infer.vs.simu.plot(states.dat, simu.dat, data.type=c("h", "g","r"),position = NA, ibd.only=TRUE)
+ibdhap.correct.bylen(states.dat, simu.dat, data.type=c("h",
+"g","r"),ibd.only=TRUE, position = NA)
 }
 
 \arguments{
@@ -43,7 +44,19 @@ A dataframe where each row represents a segment of true (simulated) ibd
 }
 
 \examples{
+## this example is taken from the package vignette.
+##See vignette(IBDhaploRtools_tutorial)
 
+data(qibd_phased)
+data(ids_phased)
+data(trueibd_phased)
+
+phased.gold <- ibdhap.make.states( qibd.file  = qibd_phased,
+                   ids.file= ids_phased, cutoff = 0.8)
+
+corr.bylen.phased <-ibdhap.correct.bylen( phased.gold, 
+                     trueibd_phased, data.type="h", 
+                     ibd.only=FALSE, position=NA)
 
 }
 
