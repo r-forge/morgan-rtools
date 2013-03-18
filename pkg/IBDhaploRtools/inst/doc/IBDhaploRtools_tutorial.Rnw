@@ -1,0 +1,480 @@
+%\VignetteIndexEntry{IBDhaploRtools tutorial}
+\documentclass[12pt]{article} % Uses 10pt
+
+\usepackage{Sweave}
+%\usepackage[left=3cm,top=3cm,right=3cm]{geometry}
+
+\SweaveOpts{keep.source=TRUE}
+
+\title{ IBD\_Haplo R Tools}
+\author{Marshall Brown, updated by E. A. Thompson, Fiona Grimson}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+
+\verb!IBDhaploRtools! consists of several functions to store, analyze,
+and plot the output of the \verb!IBD_Haplo!. More information
+regarding \verb!IBD_Haplo! can be found at
+www.stat.washington.edu/thompson/Genepi/pangaea.shtml, including a
+tutorial on how to use the software to generate outputs like the
+example data sets used in this tutorial.
+
+\section{Installing the Package} 
+To begin, install and load the package into \verb|R| if you have not
+already done so. This tutorial is also included in the package
+distribution as a vignette.
+<<load.package>>=
+## to install the package
+## install.packages("IBDhaploRtools", repos="http://R-Forge.R-project.org") 
+
+## to load the library at the start of R sesssion
+library("IBDhaploRtools")
+
+## to bring up this tutorial 
+## vignette("IBDhaploRtools_tutorial")
+@ 
+
+Once the package is loaded, help files for specific functions can be
+accessed by typing \verb!?[function name]! (for example
+\verb!?ibdhap.make.states!.)
+
+It is also possible to view a list of all functions and data sets in the package
+\begin{verbatim}
+## list everything in the package
+ls("package:IBDhaploRtools", all=TRUE)
+## list all the functions and their arguments
+lsf.str("package:IBDhaploRtools")
+## list datasets 
+data(package = "IBDhaploRtools")$results 
+\end{verbatim}
+
+This tutorial provides a description of the main functions in this
+package, and demonstrates how to implement these functions on IBDhaplo
+outputs.
+
+\section{Reading in Data}
+
+IBDhaplo output consists of a qibd file and an ids file. There is the
+option to supply each file as either a matrix which the user has
+already loaded into R, or as a string specifying the location of the
+file.
+
+For this tutorial we will use examples of ids and qibd files for phased
+(haplotypic) and unphased (genotypic) data that are included in the
+package. First we need to load the example data sets: 
+
+<<load.data>>=
+## to use the tutorial data 
+data(qibd_phased)
+data(ids_phased)
+
+data(ids_unphased)
+data(qibd_unphased)
+  
+## to use you own data, e.g.
+## my.qibd.filename <- '~/Documents/qibd_unphased_2011.gold'
+## my.ids.filename <- '~/Documents/ids_unphased_2011.gold'
+@ 
+
+The function \verb!ibdhap.makes.states! will read the files and
+creates output that is used by all the other functions in the
+package. Thus, it is imperative to run this \verb!ibdhap.make.states!
+first before any other function.
+
+\begin{description}
+
+\item [ibdhap.make.states:] stores and simplifies the main output
+  files (called ``qibd\_h.out'' in the Gold examples) created by IBD
+  Haplo. This is acheived by ``calling'' a marker to be in an ibd
+  state if the probability of the state for the marker (conditional on
+  the data and the model) meets the ``cutoff'' value. If the cuttoff
+  is met, the value of the marker is set to the ibd state (integer
+  value from 1--15 or 1--9), otherwise value of the marker is set to 0
+  ( which means this marker is a ``no call''.)
+  \verb!ibdhap.make.states! outputs a \verb!R! \verb!data.frame! where
+  each row is a marker, and each column is a set of four
+  haplotypes. The value at a marker for a set of haplotypes is as
+  described above. The \verb!R! \verb!data.frame! that this function
+  creates is expected by other functions in this package.
+
+To run this function on the tutorial data sets, run:
+
+<<ibdhap.make.states>>= 
+
+phased.gold <- ibdhap.make.states( qibd.file  = qibd_phased,
+                   ids.file= ids_phased, cutoff = 0.8)
+
+unphased.gold <- ibdhap.make.states( qibd.file  = qibd_unphased,
+                   ids.file= ids_unphased, cutoff = 0.8)
+
+## or if you specified a file location 
+## rather than supplying pre-loaded data:
+## phased.gold <- ibdhap.make.states( qibd.filename = my.qibd.filename, 
+##                    ids.filename = my.ids.filename, cutoff = 0.8)
+@
+
+Both data frames have four columns (one for each chromosome) and 2,000
+rows (one for each marker). For the phased data set the first 20
+markers for each haplotype are:
+<<ibdhap.make.states.show>>=
+phased.gold[1:20,]
+@  
+ 
+For marker eight, we see that \verb!IBD_Haplo! inferred with greater
+than 0.8 probability that the first set of haplotypes were in IBD
+state 5 while the other three sets of haplotypes were in IBD state 15
+(no IBD shared). We also see that for the first set of haplotypes (the
+first column) IBD state 5 is inferred for markers 1 to 12, and then it
+transitions to state 15 with a one-marker no-call in between.
+
+\item [ibdhap.names:] This function reads the identifying information
+  of the chromosomes making up each set from the ids file. Each
+  chromosome has a number indicating the individual it came from, and
+  a 0/1 indicator of which of that individual's chromosomes it is. The
+  output is a matrix with a row for every set of chromosomes. Like
+  \verb!ibdhap.make.states!, the ids file can be specified by either
+  naming a matrix already loaded into R, or a string indicating the
+  location of the file.
+  
+  For example:
+  
+<<ibdhap.names>>=
+ibdhap.names( ids.file = ids_phased )
+  
+  ## or, alternatively
+  ## ibdhap.names( ids.filename = my.ids.filename)
+@
+  
+
+\end{description}
+
+\section{Data Analysis}
+
+In this section the functions that anaylse the output of
+\verb!ibdhap.make.states! are demonstrated.
+
+\begin{description}
+\item [ibdhap.summary :] summarizes the data created by
+  \verb!ibdhap.make.states! by calculating mean lengths of ibd
+  segments, mean proportions of ibd shared, and counts on ibd
+  segments. Averages are taken over all markers and all sets of
+  haplotypes. Note that we need to specify whether we have haplotypic
+  (h) or gentypic (g) data.
+
+<<ibdhap.summary>>=
+## summary statistics for phased data:
+summary.phased <- ibdhap.summary( phased.gold, data.type="h")
+summary.phased
+
+## and for unphased data:
+summary.unphased <- ibdhap.summary( unphased.gold, data.type="g") 
+summary.unphased
+@
+
+This shows, for example, that for the phased data on average 70.35\%
+of the chromosome is in IBD state 15 (no ibd shared among the four
+haplotypes), and that the mean length (number of markers) of a
+continuous segment of the chromosome with no ibd shared is 152.02703
+markers. Also note that the unphased data finds fewer segments, so
+these data are failing to detect possible state changes.
+
+
+\item [ibdhap.seg.lengths :] given the ibd states from a set of
+  haplotypes/pair of genotypes (taken from a column of the output of
+  ibdhap.make.states), this function creates a \verb!data.frame!
+  consisting of all segments of differing ibd state, paired with their
+  respective length. This function is called by many of the other
+  functions, and provides equivalent information held in a column of
+  ``qibd.gold'' but just in a different form. If a vector of positions
+  is given, segment lengths will be given in its respective units.
+
+<<ibdhap.seg.lengths>>=
+## load the positions data 
+data(posvec)
+
+seg.lengths.phased <- ibdhap.seg.lengths(phased.gold[,4], position = posvec)
+seg.lengths.phased
+
+seg.lengths.unphased <- ibdhap.seg.lengths(unphased.gold[,4], position = posvec)
+seg.lengths.unphased
+@ 
+
+In the phased data, for the fourth set of haplotypes, this shows that
+there are 30 segments of differing ibd state as inferred by
+\verb!IBD_Haplo!. The seventh segment is in ibd state 12 and consists
+of 165 markers, while the ninth segment is in ibd state 15 and
+consists of 117 markers. 
+
+Again, notice that fewer IBD/non-IBD segments are detected in the unphased case,
+and almost all the detected segments in both cases are separated by a
+few no-call markers (0).
+% Notice how this 
+% portrays the same information as \verb!qibd[,4]!, but in a more
+% compact form.
+
+ 
+\item[ibdhap.transitions:] creates a matrix of transition counts from
+  when ibd state switches along the chromosome. This function also
+  needs to know whether the data are genotypic or haplotypic
+
+<<ibdhap.transitions, keep.source=TRUE>>=
+##set the display so the matrix displays nicely
+options(width=100)
+
+## transition matrix
+transitions.phased <- ibdhap.transitions(phased.gold, 
+                                         data.type="h")
+transitions.unphased <- ibdhap.transitions(unphased.gold, 
+                                           data.type="g")
+                                        
+## print the transitions matrix into two parts so it 
+## fits on the document
+transitions.phased[,1:8]
+transitions.phased[,9:15]
+
+## unphased transitions matrix
+transitions.unphased
+@
+
+Hence, in the unphased transitions, we saw 13 instances of ibd state 9
+transitioning to ibd state 8, for example. The small no-call segments
+between the IBD/non-IBD segments are also left out.
+
+\item[ibdhap.barplot :] Graphically displays regions of any ibd
+  sharing, no ibd sharing and no calls along a chromosome for a set of
+  haplotypes / pair of genotypes. The default colors are red, white,
+  and grey for any state with ibd sharing, no ibd sharing and no
+  calls, respectively.
+  
+  
+ For the phased data:
+<<ibdhap.barplot.phased>>=
+## Figure 1
+par(mfrow=c(4,1)) 
+ibdhap.barplot(phased.gold[,1], data.type="h", 
+               xlab="", ylab="", position = posvec) 
+ibdhap.barplot(phased.gold[,2], data.type="h", 
+               xlab="", ylab="", position = posvec)
+ibdhap.barplot(phased.gold[,3], data.type="h", 
+               xlab="", ylab="", position = posvec)
+ibdhap.barplot(phased.gold[,4], data.type="h", 
+               xlab="", ylab="", position = posvec)
+@
+
+For the unphased data:
+
+<<ibdhap.barplot.unphased>>=
+## Figure 2
+par(mfrow=c(4,1)) 
+ibdhap.barplot(unphased.gold[,1], data.type="g", 
+               xlab="", ylab="", position = posvec) 
+ibdhap.barplot(unphased.gold[,2], data.type="g", 
+               xlab="", ylab="", position = posvec)
+ibdhap.barplot(unphased.gold[,3], data.type="g", 
+               xlab="", ylab="", position = posvec)
+ibdhap.barplot(unphased.gold[,4], data.type="g", 
+               xlab="", ylab="", position = posvec)
+@
+
+\begin{figure}[ht]                 
+\begin{center}
+<<label=fig1, fig=TRUE, echo=FALSE>>=
+<<ibdhap.barplot.phased>>
+@ 
+\end{center}
+\caption{Barplots for four sets of four PHASED haplotypes using IBD\_Haplo
+  output. Red means some ibd shared, white is no ibd shared and grey
+  means ``no call.''}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+<<label=fig2, fig=TRUE, echo=FALSE>>=
+<<ibdhap.barplot.unphased>>
+@
+\end{center}
+\caption{Barplots for four sets of four UNPHASED haplotypes using IBD\_Haplo
+  output. Red means some ibd shared, white is no ibd shared and grey
+  means ``no call.''}
+\end{figure}
+We can see that the first set of haplotypes does not have much
+(inferred) ibd shared among the four haplotypes, while the fourth set
+has a large portion of the chromosome in an ibd state where ibd is
+shared among the four haplotypes. 
+states. % The true ibd
+% patterns shared among the four sets of haplotypes are contained in the
+% file ``trueibd\_h\_Gold.txt''.
+
+\end{description}
+
+\section{Comparison to True IBD}
+
+Since we simulated these haplotypes, and therefore know the true ibd
+states for these four sets of haplotypes, it is interesting to compare
+the previous barplots to similar barplots created from using the known
+ibd states.  For the tutorial data we have a file containing the true
+IBD states for the phased data. We can transform this data to the true
+IBD states for unphased data.
+\begin{description}
+\item[h.to.g :] This function is to transform the true ibd states in
+  haplotypic (phased) format to gentoypic (unphased) format. Recall
+  that the phased data has 15 possible IBD states, and the phased data
+  has 9 possible ibd states. The function can be applied to any matrix
+  with entries that are integers between 0 and 15.
+
+<<load.simulated.gold, keep.source=TRUE>>=
+## load the true IBD states data set
+data(trueibd_phased)
+
+## map phased to unphased labels
+trueibd_unphased <- h.to.g( trueibd_phased )
+
+## view the first few rows of each data set
+head(trueibd_phased)
+head(trueibd_unphased)
+@ 
+
+Notice that in the ``Reading in Data'' section we saw in the IBDhaplo
+output \verb|phased.gold| the inferred IBD state for the first 12
+markers on the first set of haplotypes was 5. The true state was 9, so
+this was a false positive.
+
+
+Now we can examine the true ibd states graphically using ibdhap.barplot. Phased data:
+<<trueibd.phased.barplot>>=
+## Figure 3
+par(mfrow=c(4,1)) 
+ibdhap.barplot(trueibd_phased[,1], data.type="h", 
+               xlab="", ylab="", position = posvec) 
+ibdhap.barplot(trueibd_phased[,2], data.type="h", 
+               xlab="", ylab="", position = posvec)
+ibdhap.barplot(trueibd_phased[,3], data.type="h", 
+               xlab="", ylab="", position = posvec)
+ibdhap.barplot(trueibd_phased[,4], data.type="h", 
+               xlab="", ylab="", position = posvec)
+@  
+\begin{figure}[ht]
+\begin{center}
+<<label=fig3, fig=TRUE, echo=FALSE>>=
+<<trueibd.phased.barplot>>
+@
+\end{center}
+\caption{Barplots for four sets of four PHASED haplotypes using true IBD states of simulated
+  data. Red means some ibd shared, and white is no ibd shared}
+\end{figure}
+
+I have not plotted the barplot in the unphased case as only IBD and
+non-IBD are displayed, so both plots would be identical.
+
+Comparing Figure 3 to Figures 1 and 2, we see that \verb!IBD_Haplo!
+infers many of the IBD segments. However, many of the small segements
+of inferred IBD were false positives, such as the small region at the
+beginning of the first set of haplotypes for the phased data. The
+unphased data has more false positives than the phased.
+
+\item[ibdhap.compare :] Compares inferred ibd state with
+  simulated "true" states. Calculates the proportion of markers called
+  in the correct state, false positives (i.e. inferring ibd shared when
+  none is shared), false negatives (i.e. inferring no ibd shared when
+  ibd sharing is present) and the proportion of no calls.
+  
+<<ibd.compare>>=
+## phased data 
+ibdhap.compare(phased.gold, trueibd_phased, "h")
+## unphased data
+ibdhap.compare(unphased.gold, trueibd_unphased, "g")
+@ 
+
+We see that the unphased data give more no-call and false
+positives. The number of false negatives is the same in this example.
+
+\item[ibdhap.correct.bylen :] if simulated data (true ibd state) is
+  available, this function creates a dataframe summarizing how well
+  \verb!IBD_haplo! infers segments based on segment length.  Each row
+  in the dataframe represents a segment of true (simulated) ibd
+  (shared or not shared).  If \verb!ibd.only! is true, then only
+  segments where ibd is shared are returned. The first column of
+  resulting dataframe gives the length of the segment (as specified by
+  the position vector), the second column gives the proportion of
+  markers inferred correctly by ibdhaplo, and the third column gives
+  the ibd state of the segment.
+<<correct.bylen>>=
+## plot phased data
+corr.bylen.phased <-ibdhap.correct.bylen( phased.gold, 
+                     trueibd_phased, data.type="h", 
+                     ibd.only=FALSE, position=posvec)
+
+## plot unphased data
+corr.bylen.unphased <- ibdhap.correct.bylen( unphased.gold, 
+                        trueibd_unphased, data.type="g", 
+                        ibd.only=FALSE, position=posvec)
+@ 
+
+We can use the output of \verb!ibdhap.correct.bylen! to create Figures
+5 and 6.  The x axis is the length of the segment, and the y axis is
+proportion of SNPs called correctly within the true segment.
+
+<<fig4.code>>=
+par(mfrow=c(1,1)) ## reset the plot window to square
+## Figure 4
+plot( corr.bylen.phased[,1], corr.bylen.phased[,2], 
+       xlab="segment length", ylab="proportion correct", 
+       main = "Phased Data")
+
+ lines(lowess(corr.bylen.phased[,1], 
+       corr.bylen.phased[,2]), col="blue")
+@ 
+<<fig5.code>>=
+## Figure 5
+plot( corr.bylen.unphased[,1], corr.bylen.unphased[,2], 
+       xlab="segment length", ylab="proportion correct", 
+       main = "Unphased Data")
+
+lines(lowess(corr.bylen.unphased[,1], 
+      corr.bylen.unphased[,2]), col="blue")
+@ 
+
+\begin{figure}
+\begin{center}
+<<label=fig4, fig=TRUE, echo=FALSE>>=
+<<fig4.code>>
+@ 
+\end{center}
+\caption{Each point in the plot is a segment of true (simulated) ibd
+  (shared or not shared).The x axis is the length of the segment, and
+  the y axis is proportion snps called correctly within the true
+  segment}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+<<label=fig5, fig=TRUE, echo=FALSE>>=
+<<fig5.code>>
+@
+\end{center}
+\caption{Each point in the plot is a segment of true (simulated) ibd
+  (shared or not shared).The x axis is the length of the segment, and
+  the y axis is proportion snps called correctly within the true
+  segment}
+\end{figure}
+
+We can see, for example, in Figure 4 that \verb!IBD\_Haplo! does very
+well with ibd segments that are above 25 to 50 snps in length. In
+these data, this corresponds with ibd segments that are roughly one
+centimorgan in length. Comparing the two plots, we see again that the
+unphased data does less well than the phased, with lower proportions
+correct.
+
+
+
+
+\end{description}
+
+
+This completes our quick run through of the main functions of
+\verb!IBDHaploRtools!. Please see the man pages for more information
+regarding function arguments, descriptions, and examples.
+
+\end{document}
