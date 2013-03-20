@@ -14,7 +14,7 @@ Package: \tab IBDhaploRtools\cr
 Type: \tab Package\cr
 Version: \tab 1.5\cr
 Date: \tab 2013-03-18\cr
-License: \tab Artistic-1.0\cr
+License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
 

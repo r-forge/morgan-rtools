@@ -6,6 +6,6 @@ Date: 2013-03-18
 Author: Marshall Brown
 Maintainer: Fiona Grimson <fgrimson@uw.edu>
 Description: IBDhaploRtools consists of several functions to analyze, plot, and store the output of running IBD_Haplo software package. More information regarding IBD_Haplo can be found at www.stat.washington.edu/thompson/Genepi/pangaea.shtml.
-License: Artistic-1.0
+License: GPL-3
 LazyLoad: yes
 LazyData: yes
