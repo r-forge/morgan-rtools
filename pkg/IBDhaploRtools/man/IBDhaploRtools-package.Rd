@@ -12,7 +12,7 @@ IBDhaploRtools consists of several functions to analyze, plot, and store the out
 \tabular{ll}{
 Package: \tab IBDhaploRtools\cr
 Type: \tab Package\cr
-Version: \tab 1.5\cr
+Version: \tab 1.6\cr
 Date: \tab 2013-03-18\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
