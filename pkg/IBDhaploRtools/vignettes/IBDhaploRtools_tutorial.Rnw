@@ -317,6 +317,22 @@ the previous barplots to similar barplots created from using the known
 ibd states.  For the tutorial data we have a file containing the true
 IBD states for the phased data. We can transform this data to the true
 IBD states for unphased data.
+
+You may wish to read in raw output from fgl2ibd which is a
+space-delimited file the first two columns of which are the
+identification number of the individuals in the pair, followed by the
+ibd state for each marker, with a row for each pair. A file called
+\verb|'outfifteenibd.txt'| could be converted to the format expected
+by these functions which is a column per pair with no identification
+numbers using, for example,
+\begin{verbatim}
+## read the whole table into R 
+temp <- read.table('outfifteenibd_Gold.txt', sep = " ", header = FALSE )
+
+## remove identifiers and transpose 
+trueibd_phased <- t( temp[ ,-c(1:2)])
+\end{verbatim}
+
 \begin{description}
 \item[h.to.g :] This function is to transform the true ibd states in
   haplotypic (phased) format to gentoypic (unphased) format. Recall
