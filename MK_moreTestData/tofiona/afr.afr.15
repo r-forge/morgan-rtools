@@ -1,0 +1,43 @@
+Run used  afr  data and  afr  allele frequencies
+Scoring based on  15  state model (code  H )
+reading file afr.afr.H.qibd
+size of qibd:   1000  scoresets times  4495
+size of true:   1000  scoresets times  4495
+
+IBD sites ( 218611 )
+    Called correctly:    96.606
+    Called as wrong IBD:  0.199
+    Called as no IBD:     1.127
+    No-call:              2.068
+
+Non_IBD sites ( 4276389 )
+    Called correctly:    99.069
+    Called as IBD:        0.387
+    No-call:              0.544
+
+Number of segments= 1090.0
+
+
+True segs called correctly:     81.009
+True segs called as noibd:      14.587
+True segs called as wrong ibd:   0.092
+True segs with no 80% call:      4.312
+
+Category counts:
+Category   Inferred    True
+0     0.619     0.000
+1     0.002     0.000
+2     0.002     0.000
+3     0.003     0.000
+4     0.018     0.013
+5     0.703     0.659
+6     0.002     0.000
+7     0.003     0.000
+8     0.835     0.800
+9     0.001     0.000
+10     0.003     0.000
+11     0.816     0.790
+12     0.934     0.904
+13     0.921     0.896
+14     0.832     0.801
+15    94.305    95.137
