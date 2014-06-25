@@ -158,7 +158,8 @@ ibdhap.names( ids.file = ids_phased )
 \item[ibdhap.make.true:] This function reads in the true ibd states
   for each locus and each pair of chromosomes. This information will
   be used later for assessing the accuracy of the calls.
-
+  
+  The true IBD state labelling is assumed to be the Jaquard ordering.
 
   You may wish to read in raw output from fgl2ibd which is a
   space-delimited file the first two columns of which are the
@@ -351,6 +352,9 @@ IBD states for unphased data.
   that the phased data has 15 possible IBD states, and the phased data
   has 9 possible ibd states. The function can be applied to any matrix
   with entries that are integers between 0 and 15.
+  
+  The labelling of the 9 or 15 IBD states is assumed to be Jaquard
+  ordering.
 
 <<load.simulated.gold, keep.source=TRUE>>=
 ## load the true IBD states data set
