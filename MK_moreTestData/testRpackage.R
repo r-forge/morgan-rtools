@@ -1,3 +1,20 @@
+
+## This data was recieved from Mary Kuhner, along with summary
+## statistics that ewere to be verified with the R package.
+
+## In "tofiona":
+
+## Genotype data set:
+## - afr.afr.15      # results to match
+## - afr.afr.G.ids   # ids file 
+## - afr.afr.G.qibd  # qibd file 
+## - outnineibd.txt  # true states
+## Haplotype data set:
+## - afr.afr.9       # results to match
+## - afr.afr.H.ids   # ids file 
+## - afr.afr.H.qibd  # qibd file 
+## - outfifteenibd.txt  # true states
+
 library( "IBDhaploRtools" )
 
 qibd.geno <- "tofiona/afr.afr.G.qibd"
