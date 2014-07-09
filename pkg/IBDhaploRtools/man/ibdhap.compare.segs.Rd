@@ -6,7 +6,7 @@
   descriptions of the segments and the proportion of correct and
   incorrect calls within the segments.}
 \usage{
-ibdhap.compare.segs(calls, true, data.type=c("h", "g","r"), seg.cutoff, pos)
+ibdhap.compare.segs(calls, true, data.type, seg.cutoff, pos=NA)
 }
 \arguments{
 \item{calls}{The data.frame created from running

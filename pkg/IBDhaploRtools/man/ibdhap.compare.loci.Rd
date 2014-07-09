@@ -9,7 +9,7 @@
   ibd sharing is present) and the proportion of no calls.  }
 
 \usage{
-ibdhap.compare.loci(calls, true, data.type=c("h", "g","r"))
+ibdhap.compare.loci(calls, true, data.type)
 }
 
 \arguments{ \item{calls}{ The data.frame created from running
