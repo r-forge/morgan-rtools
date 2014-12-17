@@ -1,0 +1,28 @@
+
+--This line, and those below, will be ignored--
+
+A    pkg/IBDlabels
+A    pkg/IBDlabels/DESCRIPTION
+A    pkg/IBDlabels/vignettes
+A    pkg/IBDlabels/vignettes/IBDlabels_tutorial.Rnw
+A    pkg/IBDlabels/man
+A    pkg/IBDlabels/man/allStates.Rd
+A    pkg/IBDlabels/man/allLex.Rd
+A    pkg/IBDlabels/man/allJaq.Rd
+A    pkg/IBDlabels/man/anRpackage-package.Rd
+A    pkg/IBDlabels/man/maxlabel.Rd
+A    pkg/IBDlabels/man/allVec.Rd
+A    pkg/IBDlabels/NAMESPACE
+A    pkg/IBDlabels/R
+A    pkg/IBDlabels/R/allJaq.R
+A    pkg/IBDlabels/R/maxlabel.R
+A    pkg/IBDlabels/R/allVec.R
+A    pkg/IBDlabels/R/lex2label.R
+A    pkg/IBDlabels/R/label2lex.R
+A    pkg/IBDlabels/R/allStates.R
+A    pkg/IBDlabels/R/jaq2label.R
+A    pkg/IBDlabels/R/label2jaq.R
+A    pkg/IBDlabels/R/label2vec.R
+A    pkg/IBDlabels/R/vec2label.R
+A    pkg/IBDlabels/R/rplc.R
+A    pkg/IBDlabels/R/allLex.R

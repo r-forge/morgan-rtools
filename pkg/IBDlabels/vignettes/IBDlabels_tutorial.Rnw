@@ -68,7 +68,8 @@ function can be called directly on fgl vectors to find the
 corresponding IBD label.
 
 <<vec>>=
-## Vectors for all labels, note the invalid IBD state produced from label 2 has NA.
+## Vectors for all labels, note the invalid IBD state produced from 
+## label 2 has NA.
 allVec( ngam = 4 ) 
        
 ## Convert vector to label, the vectors are always renumbered with fgl2vec.

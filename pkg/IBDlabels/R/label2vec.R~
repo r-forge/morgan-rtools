@@ -1,5 +1,7 @@
 label2vec <-
 function(label, ngam){
+
+    ## ifInvalid = "err", "warn" or "NA"
     
     ## checking
     if( length( label )>1) stop( "Label must be scalar" )
@@ -38,8 +40,8 @@ function(label, ngam){
     if(flag == 1) vec[1:(i+1)] = 1:(i+1)       ## broke out: put in max values
 
 
-    if( !all( vec==fgl2vec(vec) ) ){ ## INVALID STATE ###
-        vec = rep( NA, ngam )
+    if( !all( vec==fgl2label(vec) ) ){ ## INVALID STATE ###
+        vec = NA
     }
     return(vec)
 }
@@ -47,30 +49,30 @@ function(label, ngam){
 ######### OLD VERSION ##########################################
 ## Updated to give warnings and errors for invalid output/inputs
 
-## label2vec <-
-## function(label, ngam){
+label2vec <-
+function(label, ngam){
 
-##     ##initialise
-##     cc = label ##(lefotver quotient)
-##     flag = 0
-##     vec = numeric(ngam)
+    ##initialise
+    cc = label ##(lefotver quotient)
+    flag = 0
+    vec = numeric(ngam)
     
-##     for( i in (ngam-1):0 ){
-##         ##f cc = 0 break (flag=0)
-##         if (cc==0) break 
-##         ##find gg (remainder)
-##         gg = cc - (cc %/% i)*i
-##         ##continue if non-zero or cc < CDgg
-##         if (gg !=0 | cc< maxlabel(i+1) ){ 
-##             vec[i+1] = gg+1
-##             cc = cc %/% i
-##         }else{
-##             flag =1; break
-##         }
-##         i=i-1 
-##   }
-##     ##fill rest of s
-##     if(flag == 0) vec[1:(i+1)] = 1
-##     if(flag == 1) vec[1:(i+1)] = 1:(i+1)
-##     return(vec)
-## }
+    for( i in (ngam-1):0 ){
+        ##f cc = 0 break (flag=0)
+        if (cc==0) break 
+        ##find gg (remainder)
+        gg = cc - (cc %/% i)*i
+        ##continue if non-zero or cc < CDgg
+        if (gg !=0 | cc< maxlabel(i+1) ){ 
+            vec[i+1] = gg+1
+            cc = cc %/% i
+        }else{
+            flag =1; break
+        }
+        i=i-1 
+  }
+    ##fill rest of s
+    if(flag == 0) vec[1:(i+1)] = 1
+    if(flag == 1) vec[1:(i+1)] = 1:(i+1)
+    return(vec)
+}

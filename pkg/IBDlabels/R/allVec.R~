@@ -1,0 +1,17 @@
+allVec <-
+function( ngam){
+
+    nlabels <- maxlabel( ngam )
+
+    ##if( ifInvalid == "NA" ){
+
+    all.vecs <- t( sapply( 0:nlabels, label2vec, ngam=ngam) )
+
+    ##}else if( ifInvalid == "warn" ){
+    ##    all.vecs <- t( sapply( 0:nlabels, label2vec, ngam=ngam,
+    ##                   ifInvalid = "warn") )
+    ##}else{ stop( "ifInvalid = 'NA' or 'warn' in this function" ) }
+
+    rownames( all.vecs ) <- 0:nlabels 
+    return( all.vecs )
+}
