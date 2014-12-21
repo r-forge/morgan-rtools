@@ -2,7 +2,7 @@ allLex <-function( ngam ){
 
     nlabels <- maxlabel( ngam )
     invalid <- sapply( 0:nlabels, function(x){
-                          any(is.na(label2vec( x, ngam = 4)))})
+                          any(is.na(label2vec( x, ngam = ngam)))})
  
     all.lex <- rep( NA, length = nlabels+1 )
     all.lex[ !invalid ] <- 1:sum( !invalid )
