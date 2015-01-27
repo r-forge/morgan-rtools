@@ -43,7 +43,7 @@ ibdhap.make.calls <-function( qibd.filename = NULL, ids.filename = NULL,
   ##end not used.  intended to get the names of the
   ##genotypes/haplotypes.
   
-  ## empty matrix that will eventually be the output (assuming all sets have the same number of markers
+  ## empty matrix that will be the output (assuming all sets have the same number of markers
   ibd.states <- matrix(NA, ncol=length(name.sets), nrow=n.snps)
   colnames(ibd.states) <- name.sets
   
@@ -54,7 +54,7 @@ ibdhap.make.calls <-function( qibd.filename = NULL, ids.filename = NULL,
     ## subset just the data for the markers in the set.
     xind <- which( rawdat[,1]==iset)
     n.col.i <- n.col.rawdat[xind][1] ## number of columns in the set i
-    ibd.dat <- t(rawdat[xind, 2:n.col.i])
+    ibd.dat <- t(rawdat[xind, 2:n.col.i]) ## remove the set name (aready subsetted by set name)
     
     ## truncate based on "cutoff" : put 1 if cutoff is met, 0 otherwise
     ibd.trunc <- apply(ibd.dat[ 3:(n.col.i-1), ], c(1,2), meet.cutoff, cutoff)

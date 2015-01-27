@@ -135,7 +135,7 @@ than 0.8 probability that the first set of haplotypes were in IBD
 state 5 while the other three sets of haplotypes were in IBD state 15
 (no IBD shared). We also see that for the first set of haplotypes (the
 first column) IBD state 5 is inferred for markers 1 to 12, and then it
-transitions to state 15 with a one-marker no-call in between.
+transitions to state 15 with a one-marker no-call (returns 0 )in between.
 
 \item [ibdhap.names:] This function reads the identifying information
   of the chromosomes making up each set from the ids file. Each
@@ -156,24 +156,25 @@ ibdhap.names( ids.file = ids_phased )
 @
 
 \item[ibdhap.make.true:] This function reads in the true ibd states
-  for each locus and each pair of chromosomes. This information will
-  be used later for assessing the accuracy of the calls.
+  for each locus and each pair of chromosomes, if supplied in
+  MORGAN/IBD\_Create/fgl2ibd format. This information will be used
+  later for assessing the accuracy of the calls.
   
-  The true IBD state labelling is assumed to be the Jaquard ordering.
+  The matrix of true IBD states will have a row for each marker and a
+  column for each set. The true IBD state labelling is assumed to be
+  the Jaquard ordering of 15 (phased) states.
 
-  You may wish to read in raw output from fgl2ibd which is a
-  space-delimited file the first two columns of which are the
-  identification number of the individuals in the pair, followed by
-  the ibd state for each marker, with a row for each pair. This file
-  is usually named outnineibd.txt or outfifteenibd.txt. Use this function
-  with the file location. For example,
+  This function will read colums 1 (set names) and 5 (IBD label) from
+  the file location and output a matrix with phased jacquard ordered
+  IBD states, with a row for each marker, and a column for each set of
+  gametes.
 
 <<ibdhap.make.true.show>>=
 ## To load tutorial data:
 ## data( trueibd_phased )
 
 ## To load your own dataset,
-## my.trueibd.filename <-`~/Documents/outfifteen.txt'
+## my.trueibd.filename <-`~/Documents/fgl2ibdoutput.txt'
 ## ibdhap.make.true( true.filename = my.trueibd.filename )
 @
 \end{description}
