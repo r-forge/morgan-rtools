@@ -17,9 +17,13 @@
 \verb!IBDhaploRtools! consists of several functions to store, analyze,
 and plot the output of the \verb!IBD_Haplo!. More information
 regarding \verb!IBD_Haplo! can be found at
-www.stat.washington.edu/thompson/Genepi/pangaea.shtml, including a
-tutorial on how to use the software to generate outputs like the
-example data sets used in this tutorial.
+
+\begin{verbatim}
+www.stat.washington.edu/thompson/Genepi/pangaea.shtml
+\end{verbatim}
+
+including a tutorial on how to use the software to generate outputs
+like the example data sets used in this tutorial.
 
 \section{Installing the Package}
 To begin, install and load the package into \verb|R| if you have not
