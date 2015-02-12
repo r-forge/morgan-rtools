@@ -5,7 +5,7 @@ Version: 1.1
 Date: 2014-12-15
 Author: Fiona Grimson
 Maintainer: Fiona Grimson <fgrimson@uw.edu>
-Description: Convert "label", "lexicographic", "jacquard" and "vec", full state description vector. All conversions are done to and from "label", as used in IBD_Haplo. More information regarding IBD_Haplo can be found at www.stat.washington.edu/thompson/Genepi/pangaea.shtml
+Description: Convert "label", "lexicographic", "jacquard" and "vec", full state description vector. All conversions are done to and from "label", as used in IBD_Haplo. More information regarding IBD_Haplo can be found at http://www.stat.washington.edu/thompson/Genepi/pangaea.shtml.
 License: GPL-3 
 LazyLoad: yes
 LazyData: yes
