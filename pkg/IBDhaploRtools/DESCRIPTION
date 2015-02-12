@@ -5,7 +5,7 @@ Version: 1.8
 Date: 2015-01-27
 Author: Marshall Brown, Fiona Grimson
 Maintainer: Fiona Grimson <fgrimson@uw.edu>
-Description: Functions to analyze, plot, and store the output of running IBD_Haplo software package. More information regarding IBD_Haplo can be found at http://www.stat.washington.edu/thompson/Genepi/pangaea.shtml.
+Description: Functions to analyze, plot, and store the output of running IBD_haplo software package. More information regarding IBD_haplo can be found at http://www.stat.washington.edu/thompson/Genepi/pangaea.shtml.
 License: GPL-3
 LazyLoad: yes
 LazyData: yes
